@@ -443,6 +443,7 @@
 
 - (void)addAccumulatedData:(NSData *)data forConnection:(NSURLConnection *)connection;
 {
+    int debug = 0;
     NSMutableData *dataAccumulator = [self requestStateForConnection:connection].dataAccumulator;
     
     NSAssert(dataAccumulator != nil, @"Data accumulator not initialized before adding to it.");
@@ -609,7 +610,7 @@
     
     NSString *contentType = [request valueForHTTPHeaderField:@"Content-Type"];
     // Do some trivial redacting here.  In particular, redact password 
-    if (contentType && [contentType rangeOfString:@"json"].location != NSNotFound) {
+    if (body && contentType && [contentType rangeOfString:@"json"].location != NSNotFound) {
         NSMutableDictionary *obj = [NSJSONSerialization JSONObjectWithData:body options:0 error:NULL];
         if ([obj isKindOfClass:[NSDictionary class]] && [obj objectForKey:@"password"]) {
             obj = [obj mutableCopy];
